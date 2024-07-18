@@ -20,17 +20,34 @@ export const router = new Router({
     routes: [
       {
         path: resolveRouterPath(),
-        title: 'Home',
+        title: '首页',
         render: () => html`<app-home></app-home>`
       },
       {
-        path: resolveRouterPath('about'),
-        title: 'About',
+        path: resolveRouterPath('login'),
+        title: '登录',
         plugins: [
-          lazy(() => import('./pages/app-about/app-about.js')),
+          lazy(() => import('./pages/app-login.js')),
         ],
-        render: () => html`<app-about></app-about>`
+        render: () => html`<app-login></app-login>`
+      },
+      {
+        path: resolveRouterPath('profile'),
+        title: '我的',
+        plugins: [
+          lazy(() => import('./pages/app-profile/app-profile.js')),
+        ],
+        render: () => html`<app-profile></app-profile>`
+      },
+      {
+        path: resolveRouterPath('paper-device-args'),
+        title: '纸机运行参数',
+        plugins: [
+          lazy(() => import('./pages/app-paper-device-args/app-paper-device-args.js')),
+        ],
+        render: () => html`<app-paper-device-args></app-paper-device-args>`
       }
+
     ]
   });
 

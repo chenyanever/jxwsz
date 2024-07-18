@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
-import { resolveRouterPath } from '../router';
+import { customElement } from 'lit/decorators.js';
+import { router } from '../router.js';
+import { get } from "idb-keyval";
 
 import '@shoelace-style/shoelace/dist/components/card/card.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
@@ -10,124 +11,84 @@ import { styles } from '../styles/shared-styles';
 @customElement('app-home')
 export class AppHome extends LitElement {
 
-  // For more information on using properties and state in lit
-  // check out this link https://lit.dev/docs/components/properties/
-  @property() message = 'Welcome!';
-
   static styles = [
     styles,
     css`
-    #welcomeBar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    #welcomeCard,
-    #infoCard {
-      padding: 18px;
-      padding-top: 0px;
-    }
-
-    sl-card::part(footer) {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    @media(min-width: 750px) {
-      sl-card {
-        width: 70vw;
-      }
-    }
-
-
-    @media (horizontal-viewport-segments: 2) {
-      #welcomeBar {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
-      }
-
-      #welcomeCard {
-        margin-right: 64px;
-      }
-    }
+        .home-container {
+            padding: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .grid-item {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .grid-item h2 {
+            margin: 0 0 10px 0;
+        }
   `];
 
-  async firstUpdated() {
-    // this method is a lifecycle even in lit
-    // for more info check out the lit docs https://lit.dev/docs/components/lifecycle/
-    console.log('This is your home page');
+  isLoading: boolean;
+
+  constructor() {
+      super();
+      this.isLoading = true;
   }
 
-  share() {
-    if ((navigator as any).share) {
-      (navigator as any).share({
-        title: 'PWABuilder pwa-starter',
-        text: 'Check out the PWABuilder pwa-starter!',
-        url: 'https://github.com/pwa-builder/pwa-starter',
-      });
-    }
+
+  async connectedCallback() {
+    super.connectedCallback();
+    await this._checkLoginStatus();
+  }
+
+  async _checkLoginStatus() {
+      const certificate = await get('certificate');
+      if (certificate) {
+        router.navigate('/');
+        this.isLoading = false;
+        this.requestUpdate();
+      } else {
+        router.navigate('/login');
+      }
+  }
+
+  _navigateToPaperMachine() {
+    router.navigate('/paper-device-args');
   }
 
   render() {
+    if (this.isLoading) {
+      return html`<div class="loading">Loading...</div>`;
+    }
+
     return html`
       <app-header></app-header>
-
-      <main>
-        <div id="welcomeBar">
-          <sl-card id="welcomeCard">
-            <div slot="header">
-              <h2>${this.message}</h2>
-            </div>
-
-            <p>
-              For more information on the PWABuilder pwa-starter, check out the
-              <a href="https://docs.pwabuilder.com/#/starter/quick-start">
-                documentation</a>.
-            </p>
-
-            <p id="mainInfo">
-              Welcome to the
-              <a href="https://pwabuilder.com">PWABuilder</a>
-              pwa-starter! Be sure to head back to
-              <a href="https://pwabuilder.com">PWABuilder</a>
-              when you are ready to ship this PWA to the Microsoft Store, Google Play
-              and the Apple App Store!
-            </p>
-
-            ${'share' in navigator
-              ? html`<sl-button slot="footer" variant="primary" @click="${this.share}">Share this Starter!</sl-button>`
-              : null}
-          </sl-card>
-
-          <sl-card id="infoCard">
-            <h2>Technology Used</h2>
-
-            <ul>
-              <li>
-                <a href="https://www.typescriptlang.org/">TypeScript</a>
-              </li>
-
-              <li>
-                <a href="https://lit.dev">lit</a>
-              </li>
-
-              <li>
-                <a href="https://shoelace.style/">Shoelace</a>
-              </li>
-
-              <li>
-                <a href="https://github.com/thepassle/app-tools/blob/master/router/README.md"
-                  >App Tools Router</a>
-              </li>
-            </ul>
-          </sl-card>
-
-          <sl-button href="${resolveRouterPath('about')}" variant="primary">Navigate to About</sl-button>
-        </div>
-      </main>
+      <div class="home-container">
+          <h1>Welcome Home</h1>
+          <div class="grid-container">
+              <div class="grid-item" @click=${this._navigateToPaperMachine}>
+                  <h2>纸机运行参数</h2>
+                  <p>查看和管理纸机的运行参数。</p>
+              </div>
+              <div class="grid-item">
+                  <h2>电机巡检</h2>
+                  <p>检查和记录电机的运行情况。</p>
+              </div>
+          </div>
+      </div>
+      <app-toolbar></app-toolbar>
     `;
   }
+
+
 }

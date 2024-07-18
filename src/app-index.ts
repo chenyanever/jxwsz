@@ -1,8 +1,10 @@
 import { LitElement, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { createClient } from '@supabase/supabase-js';
 
 import './pages/app-home';
 import './components/header';
+import './components/toolbar';
 import './styles/global.css';
 import { router } from './router';
 

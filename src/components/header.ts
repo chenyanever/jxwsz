@@ -5,7 +5,7 @@ import { resolveRouterPath } from '../router';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 @customElement('app-header')
 export class AppHeader extends LitElement {
-  @property({ type: String }) title = 'PWA Starter';
+  @property({ type: String }) title = '江西卫生纸';
 
   @property({ type: Boolean}) enableBack: boolean = false;
 
@@ -62,7 +62,7 @@ export class AppHeader extends LitElement {
 
         <div id="back-button-block">
           ${this.enableBack ? html`<sl-button size="small" href="${resolveRouterPath()}">
-            Back
+            <
           </sl-button>` : null}
 
           <h1>${this.title}</h1>

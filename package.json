@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "@shoelace-style/shoelace": "^2.15.0",
+    "@supabase/supabase-js": "^2.44.4",
     "@thepassle/app-tools": "^0.9.12",
+    "idb-keyval": "^6.2.1",
     "lit": "^3.1.2",
     "urlpattern-polyfill": "^10.0.0",
     "workbox-build": "^7.0.0",
