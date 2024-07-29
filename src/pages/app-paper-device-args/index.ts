@@ -324,9 +324,8 @@ class AppPaperDeviceArgsIndex extends LitElement {
         }
     }
 
-    async _handleShare(param: any) {
-        // 采用模板字符串构建带制表符的字符串
-        const shareData = [
+    async copyToClipboard(param: any) {
+        const text = [
             `汇报人:\t${this.userList?.find(e => e.id == param.created_by).name}`,
             `汇报时间:\t${moment.tz(param.report_date, 'Asia/Shanghai').format('YYYY-MM-DD HH:mm')}`,
             `机台:\t${this.deviceList?.find(e => e.id == param.device).no}`,
@@ -370,10 +369,29 @@ class AppPaperDeviceArgsIndex extends LitElement {
             `备注:\t${param.remark || '无'}` // 最后一行没有制表符
         ].filter(line => line !== '').join('\n'); // 过滤掉空行并使用换行符连接
 
+        // 创建一个临时的文本区域
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
 
+        // 选择文本
+        textArea.select();
+        textArea.setSelectionRange(0, 99999); // 对于移动设备支持
+
+        // 复制到剪贴板
+        document.execCommand('copy');
+
+        // 移除临时文本区域
+        document.body.removeChild(textArea);
+
+        // 提示用户已复制
+        alert('已复制到剪贴板');
+    }
+
+    async _handleShare(param: any) {
 
         try{
-            await navigator.share({title:"",text:shareData,url:""});
+            await navigator.share({title:"江西卫生纸",text:"纸机运行参数、电机巡检等功能",url:""});
         }
         catch(e) {
             alert('分享失败。');
@@ -443,7 +461,7 @@ class AppPaperDeviceArgsIndex extends LitElement {
                                     <strong>备注:</strong> ${param.remark || '无'}
                                 </sl-card>
                                 <sl-icon-button name="pencil" label="编辑" @click=${() => this._handleEdit(param)}></sl-icon-button>
-                                <sl-icon-button name="share" label="分享" @click=${() => this._handleShare(param)}></sl-icon-button>
+                                <sl-icon-button name="copy" label="复制" @click=${() => this.copyToClipboard(param)}></sl-icon-button>
                                 </div>
                             `)}
                         </div>
