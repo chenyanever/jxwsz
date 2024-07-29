@@ -6,7 +6,7 @@ import { router } from '../router.js';
 import '@shoelace-style/shoelace/dist/components/input/input.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import { supabase } from '../supabase.js';
-import { session } from '../session.js';
+import { session } from '../utils.js';
 
 
 @customElement('app-login')
@@ -32,6 +32,13 @@ export class AppLogin extends LitElement {
         text-align: left;
     }
 
+    form {
+      max-width: 300px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
     label {
         display: block;
         margin-bottom: 5px;
@@ -54,23 +61,35 @@ export class AppLogin extends LitElement {
         cursor: pointer;
     }
 
-    button:hover {
-        background-color: #0056b3;
-    }
-
     .error-message {
         color: red;
         margin-bottom: 15px;
     }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .register-link span {
+      color: var(--sl-color-primary-600);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+
     `
   ]
+
+  _navigateToRegister() {
+    router.navigate('/register');
+  }
 
   render() {
     return html`
     <div class="login-container">
         <h1>江西卫生纸</h1>
         ${this.errorMessage ? html`<div class="error-message">${this.errorMessage}</div>` : ''}
-        <form id="loginForm" @submit=${this._login}>
+        <form @submit=${this._login}>
             <div class="input-group">
                 <sl-input name="username" label="用户名" .value=${this.username} @input=${this._handleInputChange} required></sl-input>
             </div>
@@ -79,6 +98,9 @@ export class AppLogin extends LitElement {
             </div>
             <sl-button type="submit" variant="primary">登录</sl-button>
         </form>
+        <div class="register-link">
+            <p>没有账号？<span @click=${this._navigateToRegister}>立即注册</span></p>
+        </div>
     </div>
     `;
   }
@@ -94,25 +116,31 @@ export class AppLogin extends LitElement {
         this.requestUpdate();
         return;
     }
-    const { data, error } = await supabase.from('user').insert({passport: this.username,
-        password: this.password}).select();
-    console.log('id',data![0].id);
-    console.log('passport',data![0].passport);
-    await set('certificate', {id: data![0].id, passport: this.username, password: this.password});
-    session.user =  {id: data![0].id, name: '未设置', passport: this.username, password: this.password};
+    const { data } = await supabase.from('user').select().eq('passport', this.username);
+    if (data?.length == 0) {
+        this.errorMessage = '账号未注册，请先注册.';
+        this.requestUpdate();
+        return;
+    }
+    if (data[0].password != this.password) {
+        this.errorMessage = '密码不正确.';
+        this.requestUpdate();
+        return;
+    }
+    await set('certificate', {id: data![0].id, name: data![0].name, passport: this.username, password: this.password});
     this._redirectToHome();
   }
 
 
 
   _validateInputs() {
-    if (this.username.length < 4) {
-        this.errorMessage = 'Username must be at least 4 characters long.';
+    if (this.username.length < 8) {
+        this.errorMessage = '用户名长度至少要8位.';
         return false;
     }
 
     if (this.password.length < 6) {
-        this.errorMessage = 'Password must be at least 6 characters long.';
+        this.errorMessage = '密码长度至少要6位.';
         return false;
     }
 

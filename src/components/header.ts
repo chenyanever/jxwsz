@@ -9,15 +9,18 @@ export class AppHeader extends LitElement {
 
   @property({ type: Boolean}) enableBack: boolean = false;
 
+  @property({ type: String}) backPath = "home";
+
   static styles = css`
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--app-color-primary);
+      background: var(--sl-color-primary-700);
       color: white;
       padding: 12px;
       padding-top: 4px;
+      z-index: 100;
 
       position: fixed;
       left: env(titlebar-area-x, 0);
@@ -61,7 +64,7 @@ export class AppHeader extends LitElement {
       <header>
 
         <div id="back-button-block">
-          ${this.enableBack ? html`<sl-button size="small" href="${resolveRouterPath()}">
+          ${this.enableBack ? html`<sl-button size="small" href="${resolveRouterPath(this.backPath)}">
             <
           </sl-button>` : null}
 

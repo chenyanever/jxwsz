@@ -63,7 +63,7 @@ export class AppHome extends LitElement {
   }
 
   _navigateToPaperMachine() {
-    router.navigate('/paper-device-args');
+    router.navigate('/paper-device-args/index');
   }
 
   render() {

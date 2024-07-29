@@ -1,12 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { set, del } from "idb-keyval";
+import { set, del, get } from "idb-keyval";
 import { supabase } from '../../supabase';
 import { router } from '../../router';
-import { session } from '../../session';
 
 @customElement('app-profile')
-class AppProfile extends LitElement {
+export class AppProfile extends LitElement {
     static styles = css`
         .profile-container {
             padding: 20px;
@@ -33,14 +32,20 @@ class AppProfile extends LitElement {
         }
     `;
 
-    async _updatePassword() {
-        session.user!.password = '123456';
-        const { data, error } = await supabase.from('user').upsert({id: session.user?.id, passport: session.user!.passport,
-            password: session.user!.password},{ignoreDuplicates:false}).select();
+    certificate: any | null;
 
-        console.log('id',data![0].id);
-        console.log('password',data![0].password);
-        await set('certificate', {id: session.user?.id,  passport: session.user?.passport, password: session.user?.password});
+    async connectedCallback() {
+        super.connectedCallback();
+        this.certificate = await get('certificate');
+    }
+
+    async _updatePassword() {
+        this.certificate.password = '123456';
+        const { data, error } = await supabase.from('user').upsert({id: this.certificate.id, passport: this.certificate.passport,
+            password: this.certificate.password},{ignoreDuplicates:false}).select();
+
+        await set('certificate', {id: this.certificate.id,  passport: this.certificate.passport,
+            password: this.certificate.password});
     }
 
     async _logout() {
@@ -54,7 +59,7 @@ class AppProfile extends LitElement {
             <div class="profile-container">
                 <div class="profile-avatar"></div>
                 <div class="profile-info">
-                   <p>姓名: ${ session.user!.name}</p>
+                   <p>姓名: ${ session.user?.name}</p>
                 </div>
                 <div class="profile-actions">
                     <button @click=${this._updatePassword}>修改密码</button>

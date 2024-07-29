@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import { router } from '../router';
 
 @customElement('app-toolbar')
-class AppToolbar extends LitElement {
+export class AppToolbar extends LitElement {
     static styles = css`
         .toolbar {
             position: fixed;

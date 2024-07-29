@@ -24,6 +24,19 @@ export const router = new Router({
         render: () => html`<app-home></app-home>`
       },
       {
+        path: resolveRouterPath('home'),
+        title: '首页',
+        render: () => html`<app-home></app-home>`
+      },
+      {
+        path: resolveRouterPath('register'),
+        title: '注册',
+        plugins: [
+          lazy(() => import('./pages/app-register.js')),
+        ],
+        render: () => html`<app-register></app-register>`
+      },
+      {
         path: resolveRouterPath('login'),
         title: '登录',
         plugins: [
@@ -40,13 +53,39 @@ export const router = new Router({
         render: () => html`<app-profile></app-profile>`
       },
       {
-        path: resolveRouterPath('paper-device-args'),
+        path: resolveRouterPath('paper-device-args/edit'),
         title: '纸机运行参数',
         plugins: [
-          lazy(() => import('./pages/app-paper-device-args/app-paper-device-args.js')),
+          lazy(() => import('./pages/app-paper-device-args/edit.js')),
         ],
-        render: () => html`<app-paper-device-args></app-paper-device-args>`
+        render: () => html`<app-paper-device-args-edit></app-paper-device-args-edit>`
+      },
+      {
+        path: resolveRouterPath('paper-device-args/edit/:id'),
+        title: '纸机运行参数',
+        plugins: [
+          lazy(() => import('./pages/app-paper-device-args/edit.js')),
+        ],
+        render: () => html`<app-paper-device-args-edit></app-paper-device-args-edit>`
+      },
+      {
+        path: resolveRouterPath('paper-device-args/index'),
+        title: '纸机运行参数',
+        plugins: [
+          lazy(() => import('./pages/app-paper-device-args/index.js')),
+        ],
+        render: () => html`<app-paper-device-args-index></app-paper-device-args-index>`
+      },
+      {
+        path: resolveRouterPath('about'),
+        title: '关于',
+        plugins: [
+          lazy(() => import('./pages/app-about/app-about.js')),
+        ],
+        render: () => html`<app-about></app-about>`
       }
+
+
 
     ]
   });
