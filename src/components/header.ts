@@ -79,7 +79,7 @@ export class AppHeader extends LitElement {
   async _handleShare() {
 
     try{
-        await navigator.share({title:"江西卫生纸",text:"纸机运行参数、电机巡检等功能",url:""});
+        await navigator.share({title:"江西卫生纸",text:"纸机运行参数、电机巡检等功能",url:"https://de17ccee-e752-43d1-96c3-a9b3ca8ed7a2-00-qbhtlzjofibi.janeway.replit.dev/"});
     }
     catch(e) {
         alert('分享失败。');
