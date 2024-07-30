@@ -214,7 +214,7 @@ class AppPaperDeviceArgsEdit extends LitElement {
             yangke_short_fiber_ratio: entity.yangke_short_fiber_ratio,
             long_fiber_mill_power2: entity.long_fiber_mill_power2,
             lip_plate_opening: entity.lip_plate_opening,
-            vacuum_roll_line_pressure: entity.vacuum_roller_vacuum_degree,
+            vacuum_roll_line_pressure: entity.vacuum_roll_line_pressure,
             vacuum_roller_vacuum_degree: entity.vacuum_roller_vacuum_degree,
             turbine_frequency: entity.turbine_frequency,
             steam_pressure: entity.steam_pressure,
@@ -496,11 +496,6 @@ class AppPaperDeviceArgsEdit extends LitElement {
                             value=${this.formData.fabric_pressure_water} @sl-change=${this._handleInputChange} required>
                             <span slot="suffix" class="suffix">KG</span>
                         </sl-input>
-                        <sl-select label="湿强剂*" name="wet_strength" value=${this.formData.wet_strength} @sl-change=${this._handleInputChange} required>
-                            ${this.wetStrengthList?.map((ws) =>
-                                html`<sl-option value=${ws.id}>${ws.name}</sl-option>`
-                            )}
-                        </sl-select>
                         <sl-input label="湿强剂用量*" name="wet_strength_using" type="number"
                             value=${this.formData.wet_strength_using} @sl-change=${this._handleInputChange} required>
                             <span slot="suffix" class="suffix">kg/t</span>
@@ -584,11 +579,6 @@ class AppPaperDeviceArgsEdit extends LitElement {
                             value=${this.formData.fabric_pressure_water} @sl-change=${this._handleInputChange} required>
                             <span slot="suffix" class="suffix">KG</span>
                         </sl-input>
-                        <sl-select label="湿强剂*" name="wet_strength" value=${this.formData.wet_strength} @sl-change=${this._handleInputChange} required>
-                            ${this.wetStrengthList?.map((ws) =>
-                                html`<sl-option value=${ws.id}>${ws.name}</sl-option>`
-                            )}
-                        </sl-select>
                         <sl-input label="湿强剂用量*" name="wet_strength_using" type="number"
                             value=${this.formData.wet_strength_using} @sl-change=${this._handleInputChange} required>
                             <span slot="suffix" class="suffix">kg/t</span>
@@ -637,3 +627,9 @@ class AppPaperDeviceArgsEdit extends LitElement {
         `;
     }
 }
+
+                        // <sl-select label="湿强剂*" name="wet_strength" value=${this.formData.wet_strength} @sl-change=${this._handleInputChange} required>
+                        //     ${this.wetStrengthList?.map((ws) =>
+                        //         html`<sl-option value=${ws.id}>${ws.name}</sl-option>`
+                        //     )}
+                        // </sl-select>
