@@ -1,5 +1,5 @@
 import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import { set } from "idb-keyval";
 import { router } from '../router.js';
 
@@ -51,6 +51,7 @@ export class AppRegister extends LitElement {
 
   async _isDuplicate() {
     const { data } = await supabase.from('user').select().eq('passport', this.username);
+    // @ts-ignore
     return data.length > 0;
   }
 
@@ -103,6 +104,7 @@ export class AppRegister extends LitElement {
         router.navigate('/');;
       }
     } catch (err) {
+      // @ts-ignore
       this.error = '注册失败：' + err.message;
     }
     this.requestUpdate();
@@ -116,10 +118,18 @@ export class AppRegister extends LitElement {
     return html`
       <div class="register-container">
         <form @submit=${this._handleRegister}>
-            <div class="input-group"><sl-input label="用户名*" name="username" required @sl-change=${e => this.username = e.target.value}></sl-input></div>
-            <div class="input-group"><sl-input label="姓名*" name="name" required @sl-change=${e => this.name = e.target.value}></sl-input></div>
-            <div class="input-group"><sl-input label="密码*" name="password" type="password" required @sl-change=${e => this.password = e.target.value}></sl-input></div>
-            <div class="input-group"><sl-input label="确认密码*" name="confirmPassword" type="password" required @sl-change=${e => this.confirmPassword = e.target.value}></sl-input></div>
+            <div class="input-group"><sl-input label="用户名*" name="username" required @sl-change=${
+              // @ts-ignore
+              e => this.username = e.target.value}></sl-input></div>
+            <div class="input-group"><sl-input label="姓名*" name="name" required @sl-change=${
+              // @ts-ignore
+              e => this.name = e.target.value}></sl-input></div>
+            <div class="input-group"><sl-input label="密码*" name="password" type="password" required @sl-change=${
+              // @ts-ignore
+              e => this.password = e.target.value}></sl-input></div>
+            <div class="input-group"><sl-input label="确认密码*" name="confirmPassword" type="password" required @sl-change=${
+              // @ts-ignore
+              e => this.confirmPassword = e.target.value}></sl-input></div>
             ${this.error ? html`<sl-alert variant="danger" open>${this.error}</sl-alert>` : ''}
             <sl-button type="submit" variant="primary">注册</sl-button>
         </form>

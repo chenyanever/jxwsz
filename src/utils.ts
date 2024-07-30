@@ -25,6 +25,7 @@ export function transformData(data: DataObject[]): (string | number)[][] {
             const [key, value] = pair.split(':');
             // 找到对应的键并设置对应的值
             const index = headers.indexOf(key);
+            // @ts-ignore
             row[index] = value === undefined ? "" : isNaN(Number(value)) ? value : Number(value);
         });
         result.push(row);

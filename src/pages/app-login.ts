@@ -1,12 +1,12 @@
 import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import { set } from "idb-keyval";
 import { router } from '../router.js';
 
 import '@shoelace-style/shoelace/dist/components/input/input.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import { supabase } from '../supabase.js';
-import { session } from '../utils.js';
+
 
 
 @customElement('app-login')
@@ -106,7 +106,9 @@ export class AppLogin extends LitElement {
   }
 
   _handleInputChange(e: Event) {
+    // @ts-ignore
     const { name, value } = e.target;
+    // @ts-ignore
     this[name] = value;
 }
 
@@ -122,6 +124,7 @@ export class AppLogin extends LitElement {
         this.requestUpdate();
         return;
     }
+    // @ts-ignore
     if (data[0].password != this.password) {
         this.errorMessage = '密码不正确.';
         this.requestUpdate();

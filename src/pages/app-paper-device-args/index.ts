@@ -12,6 +12,7 @@ import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
 
 @customElement('app-paper-device-args-index')
+// @ts-ignore
 class AppPaperDeviceArgsIndex extends LitElement {
     title: string = "纸机运行参数";
 
@@ -179,6 +180,7 @@ class AppPaperDeviceArgsIndex extends LitElement {
         this.loading = false;
     }
 
+    // @ts-ignore
     async loadExportData(): any[] {
         const query = supabase
             .from('paper_device_args_report')
@@ -305,12 +307,14 @@ class AppPaperDeviceArgsIndex extends LitElement {
     }
 
     handleSearchInputChange(e: Event) {
+        // @ts-ignore
         this.searchKeyword = e.target.value;
     }
 
     _highlightText(text: string, keyword: string) {
         if (!keyword) return text;
         const regex = new RegExp(`(${keyword})`, 'gi');
+        // @ts-ignore
         return text.split(regex).map((part, index) =>
             regex.test(part) ? html`<span class="highlight">${part}</span>` : part
         );
@@ -388,6 +392,7 @@ class AppPaperDeviceArgsIndex extends LitElement {
         alert('已复制到剪贴板');
     }
 
+    // @ts-ignore
     async _handleShare(param: any) {
 
         try{

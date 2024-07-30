@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import moment from 'moment-timezone';
 import { get } from "idb-keyval";
-import { Router } from '@thepassle/app-tools/router.js';
 
 import '@shoelace-style/shoelace/dist/components/input/input.js';
 import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
@@ -17,6 +16,7 @@ import { styles } from '../../styles/shared-styles';
 
 
 @customElement('app-paper-device-args-edit')
+// @ts-ignore
 class AppPaperDeviceArgsEdit extends LitElement {
     title: string = "纸机运行参数";
 
@@ -123,6 +123,7 @@ class AppPaperDeviceArgsEdit extends LitElement {
         super.connectedCallback();
         this.certificate = await get('certificate');
         await this._initData();
+        // @ts-ignore
         this._id=router.context.params.id; // Access the path parameter
         await this.loadData(this._id);
         this.requestUpdate();
@@ -183,6 +184,7 @@ class AppPaperDeviceArgsEdit extends LitElement {
 
 
     _handleInputChange(e: Event) {
+        // @ts-ignore
         const { name, value } = e.target;
         this.formData = { ...this.formData, [name]: value };
         this.requestUpdate();
@@ -190,9 +192,10 @@ class AppPaperDeviceArgsEdit extends LitElement {
 
     async _handleSubmit(e: Event) {
         e.preventDefault();
+        // @ts-ignore
         const formData = new FormData(e.target);
         const entity = Object.fromEntries(formData);
-        const { error } = await supabase.from("paper_device_args_report").upsert({
+        await supabase.from("paper_device_args_report").upsert({
             id: this._id,
             created_by: this.certificate.id,
             report_date: moment.tz(entity.report_date, 'Asia/Shanghai').utc(),

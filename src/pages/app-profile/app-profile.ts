@@ -41,6 +41,7 @@ export class AppProfile extends LitElement {
 
     async _updatePassword() {
         this.certificate.password = '123456';
+        // @ts-ignore
         const { data, error } = await supabase.from('user').upsert({id: this.certificate.id, passport: this.certificate.passport,
             password: this.certificate.password},{ignoreDuplicates:false}).select();
 
@@ -50,7 +51,6 @@ export class AppProfile extends LitElement {
 
     async _logout() {
         await del('certificate');
-        session.user = null;
         router.navigate('/');
     }
 
@@ -59,7 +59,7 @@ export class AppProfile extends LitElement {
             <div class="profile-container">
                 <div class="profile-avatar"></div>
                 <div class="profile-info">
-                   <p>姓名: ${ session.user?.name}</p>
+                   <p>姓名: ${ this.certificate.name}</p>
                 </div>
                 <div class="profile-actions">
                     <button @click=${this._updatePassword}>修改密码</button>
